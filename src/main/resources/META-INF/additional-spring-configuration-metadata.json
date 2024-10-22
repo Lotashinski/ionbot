@@ -1,0 +1,7 @@
+{"properties": [
+  {
+    "name": "application.telegram.store",
+    "type": "java.lang.String",
+    "description": "A description for 'application.telegram.store'"
+  }
+]}

@@ -1,4 +1,4 @@
-package com.github.lotashinski.ionbot.dto;
+package com.github.lotashinski.ionbot.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,6 @@ public class Disk {
     
     private String mountPoint;
     
-    private long size;
-    
-    private long used;
+    private MemoryUsage memoryUsage;
     
 }

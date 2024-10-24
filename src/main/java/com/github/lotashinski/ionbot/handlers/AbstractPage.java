@@ -39,7 +39,7 @@ public abstract class AbstractPage implements UpdateHandler {
     @Override
     public void handle(Update update, AbsSender sender) throws TelegramApiException {
         var chat = Utills.extractChat(update, sender);
-        var currentPage = pageControl.getPage(chat.getId()).get();
+        var currentPage = pageControl.getPage(chat.getId());
         
         if (update.hasCallbackQuery() && currentPage == getId()) {
             handleCallback(update, sender);

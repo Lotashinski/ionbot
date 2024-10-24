@@ -9,8 +9,9 @@ import javax.swing.filechooser.FileSystemView;
 
 import org.springframework.stereotype.Service;
 
-import com.github.lotashinski.ionbot.dto.Disk;
-import com.github.lotashinski.ionbot.dto.OS;
+import com.github.lotashinski.ionbot.service.Disk;
+import com.github.lotashinski.ionbot.service.MemoryUsage;
+import com.github.lotashinski.ionbot.service.OS;
 import com.github.lotashinski.ionbot.service.SystemInfo;
 
 @Service
@@ -32,29 +33,45 @@ public class SystemInfoImpl implements SystemInfo {
         var displayname = fsv.getSystemDisplayName(file);
         var description = fsv.getSystemDisplayName(file);
         var path = file.getAbsolutePath();
-        var totalSpace = file.getTotalSpace();
-        var usedSpace = file.getTotalSpace() - file.getFreeSpace();
-
+        
+        var memoryUsage = MemoryUsage.builder()
+        		.totalSpace(file.getTotalSpace())
+        		.usedSpace(file.getTotalSpace() - file.getFreeSpace())
+        		.build();
+        
         return Disk.builder()
                 .device(displayname)
                 .type(description)
                 .mountPoint(path)
-                .size(totalSpace)
-                .used(usedSpace)
+                .memoryUsage(memoryUsage)
                 .build();
     }
 
     @Override
     public OS getOS() {
-        var mxBean = ManagementFactory.getOperatingSystemMXBean();
-        var builder = OS.builder()
+        var mxBean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        
+        var totalMemory = mxBean.getTotalMemorySize();
+        var memory = MemoryUsage.builder()
+        		.totalSpace(totalMemory)
+        		.usedSpace(totalMemory - mxBean.getFreeMemorySize())
+        		.build();
+        
+        var totalSwap = mxBean.getTotalSwapSpaceSize();
+        var swap = MemoryUsage.builder()
+        		.totalSpace(totalSwap)
+        		.usedSpace(totalSwap - mxBean.getFreeSwapSpaceSize())
+        		.build();
+        
+        return OS.builder()
                 .arch(mxBean.getArch())
                 .name(mxBean.getName())
                 .version(mxBean.getVersion())
                 .processors(mxBean.getAvailableProcessors())
-                .loadAverage(mxBean.getSystemLoadAverage());
-        
-        return builder.build();
+                .loadAverage(mxBean.getSystemLoadAverage())
+                .mamory(memory)
+                .swap(swap)
+                .build();
     }
 
 }

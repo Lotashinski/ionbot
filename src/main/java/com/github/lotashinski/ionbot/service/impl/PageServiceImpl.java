@@ -1,7 +1,5 @@
 package com.github.lotashinski.ionbot.service.impl;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.github.lotashinski.ionbot.entity.Pages;
@@ -19,8 +17,8 @@ public class PageServiceImpl implements PageControl {
     
     
     @Override
-    public Optional<Pages> getPage(long chatId) {
-        return chatService.getProperty(chatId, Property.PAGE);
+    public Pages getPage(long chatId) {
+        return chatService.getProperty(chatId, Property.PAGE, Pages.MAIN);
     }
 
     @Override

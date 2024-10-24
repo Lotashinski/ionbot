@@ -1,4 +1,4 @@
-package com.github.lotashinski.ionbot.dto;
+package com.github.lotashinski.ionbot.service;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +18,9 @@ public class OS {
     private int processors;
     
     private double loadAverage;
+    
+    private MemoryUsage mamory;
+    
+    private MemoryUsage swap;
     
 }
